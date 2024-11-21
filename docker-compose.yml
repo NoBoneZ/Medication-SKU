@@ -1,0 +1,40 @@
+services:
+
+  axmed_postgres:
+    image: postgres
+    container_name: postgres
+    environment:
+     - POSTGRES_DB=${DB_NAME}
+     - POSTGRES_USER=${DB_USERNAME}
+     - POSTGRES_PASSWORD=${DB_PASSWORD}
+    ports:
+    - '5432:5432'
+    volumes:
+    - pg_data:/var/lib/postgresql/data
+    networks:
+      - axmed_network
+
+  axmed_django:
+    restart: on-failure
+    build: .
+    container_name: axmed_django
+    command: bash -c "python manage.py migrate && gunicorn axmed.wsgi:application --reload --bind 0.0.0.0:8000 --timeout 180 --workers=8"
+    ports:
+      - '8000:8000'
+    volumes:
+      - .:/app
+      - ./static/:/home/app/static
+      - ./.env:/home/app/.env
+    depends_on:
+      - axmed_postgres
+    networks:
+      - axmed_network
+
+
+
+volumes:
+  pg_data:
+
+networks:
+  axmed_network:
+    name: axmed_network
