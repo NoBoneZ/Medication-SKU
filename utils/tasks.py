@@ -20,7 +20,7 @@ def send_otp_for_verification(user_id: str, email: str):
 
     receiver = (email,)
     msg_html = render_to_string('emails/otp_email.html', dict(otp_code=otp))
-    msg = EmailMessage(subject="Your One-Time Password (OTP) for Account Verification", body=otp, from_email=settings.EMAIL_HOST_USER, to=receiver)
+    msg = EmailMessage(subject="Your One-Time Password (OTP) for Account Verification", body=msg_html, from_email=settings.EMAIL_HOST_USER, to=receiver)
     msg.content_subtype = "html"
     msg.send()
     return "Done"

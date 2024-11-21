@@ -13,7 +13,7 @@ import os
 from datetime import timedelta
 
 from corsheaders.defaults import default_headers
-from decouple import config
+from decouple import config, Csv
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -205,3 +205,6 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
     'api-key',
     'hash-key'
 ]
+
+
+ERROR_NOTIFICATION_ADMINS = config("ERROR_NOTIFICATION_ADMINS", default=[], cast=Csv())
